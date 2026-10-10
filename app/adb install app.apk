@@ -1,1 +1,369 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>My Talking Anzu Mazaki</title>
+    
+    <!-- مكتبة إعلانات AdMob للويب -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-3940256099942544" crossorigin="anonymous"></script>
+
+    <style>
+        /* --- 1. إعدادات التصميم العامة (CSS) --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background-color: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        /* حاوية واجهة الجوال */
+        .game-container {
+            width: 100%;
+            max-width: 380px;
+            height: 680px;
+            background: linear-gradient(180deg, #ffdde1 0%, #ee9ca7 100%);
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 4px solid #ffffff;
+        }
+
+        /* الشريط العلوي للعملات والعمل المالي والطاقة */
+        .header {
+            text-align: center;
+            z-index: 2;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            color: #d63031;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
+            padding: 6px 14px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .coins-display {
+            font-weight: bold;
+            color: #d35400;
+            font-size: 15px;
+        }
+
+        .energy-bar-wrapper {
+            width: 50%;
+            background-color: #e0e0e0;
+            height: 12px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .energy-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #2ecc71, #1abc9c);
+            width: 100%;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        /* منطقة الشخصية (أنزو مازاكي) */
+        .anzu-stage {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .anzu-avatar {
+            width: 190px;
+            height: 190px;
+            background: radial-gradient(circle, #fd79a8 0%, #e84393 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 85px;
+            box-shadow: 0 10px 20px rgba(232, 67, 147, 0.4);
+            border: 4px solid #ffffff;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .anzu-avatar:active {
+            transform: scale(0.92);
+        }
+
+        .status-text {
+            margin-top: 18px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #2d3436;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        /* شريط التحكم السفلي */
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            z-index: 2;
+        }
+
+        .btn {
+            background: #ffffff;
+            border: none;
+            padding: 10px 4px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #d63031;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn span {
+            font-size: 20px;
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+        }
+
+        .btn-ad {
+            background: #ffeaa7;
+            color: #d35400;
+            grid-column: span 4;
+            margin-top: 5px;
+            flex-direction: row;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <!-- 1. الشريط العلوي (العملات والطاقة) -->
+    <div class="header">
+        <h1>My Talking Anzu Mazaki</h1>
+        <div class="stats-bar">
+            <div class="coins-display">💰 <span id="coinCount">100</span></div>
+            <div class="energy-bar-wrapper">
+                <div class="energy-bar" id="energyBar"></div>
+            </div>
+            <span>⚡</span>
+        </div>
+    </div>
+
+    <!-- 2. مسرح الشخصية التفاعلي -->
+    <div class="anzu-stage" onclick="touchAnzu()">
+        <div class="anzu-avatar" id="anzuAvatar">💃</div>
+        <div class="status-text" id="statusText">انقر على أنزو للتفاعل معها!</div>
+    </div>
+
+    <!-- 3. الأزرار السفلى والإعلانات -->
+    <div class="controls">
+        <button class="btn" onclick="feedAnzu()">
+            <span>🍕</span>
+            المطبخ
+        </button>
+        <button class="btn" onclick="danceAnzu()">
+            <span>🎵</span>
+            الرقص
+        </button>
+        <button class="btn" onclick="changeOutfit()">
+            <span>👗</span>
+            الملابس
+        </button>
+        <button class="btn" onclick="toggleMic()">
+            <span>🎙️</span>
+            التحدث
+        </button>
+
+        <!-- زر مشاهدة فيديو إعلاني لشحن الطاقة والذهب (AdMob Reward) -->
+        <button class="btn btn-ad" onclick="watchVideoAd()">
+            <span>🎬</span> مشاهدة فيديو (شحن الطاقة + 50 عملة)
+        </button>
+    </div>
+</div>
+
+<!-- --- 4. منطق البرمجة والتفاعل (JavaScript) --- -->
+<script>
+    // حالة اللعبة وقيم البيانات
+    let energy = 100;
+    let coins = 100;
+    let isListening = false;
+    let currentOutfitIndex = 0;
+    const outfits = ["💃", "👩‍🎓", "🧚‍♀️", "👑"];
+
+    // عناصر الواجهة
+    const energyBar = document.getElementById("energyBar");
+    const coinCount = document.getElementById("coinCount");
+    const statusText = document.getElementById("statusText");
+    const anzuAvatar = document.getElementById("anzuAvatar");
+
+    // 1. التفاعل باللمس مع أنزو
+    function touchAnzu() {
+        if (energy <= 10) {
+            updateStatus("أنزو متعبة جداً! قم بإطعامها من المطبخ.");
+            return;
+        }
+        
+        const reactions = [
+            "أنزو تضحك وتتفاعل معك! 😊",
+            "أنزو تؤدي حركة قفز استعراضية! 🌟",
+            "أنزو تلوح بيدك وتقول مرحباً! 👋"
+        ];
+        
+        const randomReaction = reactions[Math.floor(Math.random() * reactions.length)];
+        updateStatus(randomReaction);
+        reduceEnergy(5);
+        addCoins(5);
+
+        // حركة الانكماش والقفز
+        anzuAvatar.style.transform = "scale(1.15) rotate(6deg)";
+        setTimeout(() => {
+            anzuAvatar.style.transform = "scale(1) rotate(0deg)";
+        }, 200);
+    }
+
+    // 2. إطعام أنزو (قسم المطبخ)
+    function feedAnzu() {
+        if (coins < 10) {
+            updateStatus("لا تملك عملات كافية للشراء! شاهد فيديو لكسب الذهب.");
+            return;
+        }
+        if (energy >= 100) {
+            updateStatus("أنزو شبعانة تماماً!");
+            return;
+        }
+        
+        coins -= 10;
+        energy = Math.min(100, energy + 30);
+        updateUI();
+        updateStatus("أنزو استمتعت بالوجبة واستعادت طاقتها! 🍕");
+    }
+
+    // 3. قسم الرقص والموسيقى
+    function danceAnzu() {
+        if (energy < 15) {
+            updateStatus("طاقة أنزو منخفضة للرقص!");
+            return;
+        }
+        
+        reduceEnergy(15);
+        addCoins(15);
+        updateStatus("أنزو ترقص على أنغام الموسيقى! 🎶");
+        
+        anzuAvatar.style.transform = "translateY(-15px) rotate(-10deg)";
+        setTimeout(() => {
+            anzuAvatar.style.transform = "translateY(0px) rotate(10deg)";
+            setTimeout(() => {
+                anzuAvatar.style.transform = "translateY(0px) rotate(0deg)";
+            }, 150);
+        }, 150);
+    }
+
+    // 4. خزانة الملابس (تغيير المظهر)
+    function changeOutfit() {
+        currentOutfitIndex = (currentOutfitIndex + 1) % outfits.length;
+        anzuAvatar.innerText = outfits[currentOutfitIndex];
+        updateStatus("تم اختيار مظهر جديد لأنزو! 👗");
+    }
+
+    // 5. نظام التحدث وتكرار الصوت
+    function toggleMic() {
+        if (isListening) return;
+
+        isListening = true;
+        updateStatus("أنزو تستمع إليك الآن... 🎧");
+        anzuAvatar.style.transform = "scale(1.05)";
+
+        setTimeout(() => {
+            updateStatus("أنزو تكرر كلامك بنبرة مرحة! 🗣️");
+            anzuAvatar.style.transform = "scale(1)";
+            
+            setTimeout(() => {
+                updateStatus("انقر على أنزو للعب معها!");
+                isListening = false;
+            }, 2000);
+        }, 2500);
+    }
+
+    // 6. محاكاة مشاهدة فيديو إعلاني (Rewarded Video Ad)
+    function watchVideoAd() {
+        updateStatus("جاري تحضير فيديو الإعلان... 🎬");
+        
+        setTimeout(() => {
+            energy = 100;
+            addCoins(50);
+            updateStatus("شكراً لمشاهدة الإعلان! تم شحن الطاقة +50 عملة 💰");
+        }, 2000);
+    }
+
+    // وظائف مساعدة للتحكم بالطاقة والعملات
+    function reduceEnergy(amount) {
+        energy = Math.max(0, energy - amount);
+        updateUI();
+    }
+
+    function addCoins(amount) {
+        coins += amount;
+        updateUI();
+    }
+
+    function updateUI() {
+        energyBar.style.width = energy + "%";
+        coinCount.innerText = coins;
+        
+        if (energy < 30) {
+            energyBar.style.background = "linear-gradient(90deg, #e74c3c, #c0392b)";
+        } else {
+            energyBar.style.background = "linear-gradient(90deg, #2ecc71, #1abc9c)";
+        }
+    }
+
+    function updateStatus(text) {
+        statusText.innerText = text;
+    }
+</script>
+
+</body>
+</html>
 
